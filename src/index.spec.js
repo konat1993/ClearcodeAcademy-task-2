@@ -72,7 +72,12 @@ describe("Test compare function", () => {
       start_date: false,
       end_date: false,
       active: true,
-      agency: { uuid: false, name: false, tags: true, accounts: false },
+      agency: {
+        uuid: false,
+        name: false,
+        tags: true,
+        accounts: false
+      },
       line_items: [
         {
           uuid: false,

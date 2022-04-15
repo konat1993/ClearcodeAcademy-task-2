@@ -3,17 +3,29 @@ import goThroughArray from "./goThroughArray";
 import isArray from "./isArray";
 import isObject from "./isObject";
 
-const goThroughObject = (obj, compareObj) => {
+const goThroughObject = (prevObj, compareNextObj) => {
   let tmpResult;
-  for (const key in obj) {
-    const value = obj[key];
-    if (compareObj[key] === undefined) {
-      const objKeys = Object.keys(value);
-      if (isArray(value)) {
-        if (isObject(value[0])) {
+  const longerObject =
+    Object.keys(prevObj).length >= Object.keys(compareNextObj).length
+      ? prevObj
+      : compareNextObj;
+  const shorterObject =
+    Object.keys(prevObj).length >= Object.keys(compareNextObj).length
+      ? compareNextObj
+      : prevObj;
+
+  for (const key in longerObject) {
+    const longerObjValue = longerObject[key];
+
+    if (shorterObject[key] === undefined) {
+      const objKeys = Object.keys(longerObjValue);
+      if (isArray(longerObjValue)) {
+        if (isObject(longerObjValue[0])) {
           tmpResult = {
             ...tmpResult,
-            [key]: value.map(() => createNewBoolObject(value, objKeys)[0])
+            [key]: longerObjValue.map(
+              () => createNewBoolObject(longerObjValue, objKeys)[0]
+            )
           };
         } else {
           tmpResult = {
@@ -21,10 +33,10 @@ const goThroughObject = (obj, compareObj) => {
             [key]: true
           };
         }
-      } else if (isObject(value)) {
+      } else if (isObject(longerObjValue)) {
         tmpResult = {
           ...tmpResult,
-          [key]: createNewBoolObject(value, objKeys)
+          [key]: createNewBoolObject(longerObjValue, objKeys)
         };
       } else {
         tmpResult = {
@@ -34,21 +46,21 @@ const goThroughObject = (obj, compareObj) => {
       }
       continue;
     }
-    if (Object.hasOwnProperty.call(obj, key)) {
-      if (isObject(value)) {
+    if (Object.hasOwnProperty.call(longerObject, key)) {
+      if (isObject(longerObjValue)) {
         tmpResult = {
           ...tmpResult,
-          [key]: goThroughObject(value, compareObj[key])
+          [key]: goThroughObject(longerObjValue, shorterObject[key])
         };
-      } else if (isArray(value)) {
+      } else if (isArray(longerObjValue)) {
         tmpResult = {
           ...tmpResult,
-          [key]: goThroughArray(value, compareObj[key])
+          [key]: goThroughArray(longerObjValue, shorterObject[key])
         };
       } else {
         tmpResult = {
           ...tmpResult,
-          [key]: value !== compareObj[key]
+          [key]: longerObjValue !== shorterObject[key]
         };
       }
     }

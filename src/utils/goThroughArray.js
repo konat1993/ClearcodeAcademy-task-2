@@ -2,15 +2,17 @@ import createNewBoolObject from "./createNewBoolObject";
 import goThroughObject from "./goThroughObject";
 import isObject from "./isObject";
 
-const goThroughArray = (arr, compareArr) => {
+const goThroughArray = (prevArr, compareNextArr) => {
   let isArrChanged = [];
-  if (!isObject(arr[0]) && arr.length !== compareArr.length) {
+  if (!isObject(prevArr[0]) && prevArr.length !== compareNextArr.length) {
     isArrChanged = true;
     return isArrChanged;
   }
-  if (isObject(arr[0])) {
-    const longerArray = arr.length > compareArr.length ? arr : compareArr;
-    const shorterArray = arr.length > compareArr.length ? compareArr : arr;
+  if (isObject(prevArr[0])) {
+    const longerArray =
+      prevArr.length > compareNextArr.length ? prevArr : compareNextArr;
+    const shorterArray =
+      prevArr.length > compareNextArr.length ? compareNextArr : prevArr;
 
     let newObjEl = {};
     longerArray.forEach((objEl, index) => {
@@ -28,7 +30,7 @@ const goThroughArray = (arr, compareArr) => {
       }
     });
   } else {
-    isArrChanged = !arr.every((el, index) => el === compareArr[index]);
+    isArrChanged = !prevArr.every((el, index) => el === compareNextArr[index]);
   }
   return isArrChanged;
 };
