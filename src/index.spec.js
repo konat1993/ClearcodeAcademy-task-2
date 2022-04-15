@@ -89,7 +89,7 @@ describe("Test compare function", () => {
         }
       ]
     };
-
+    console.log("Test result 1", compare(prev, next));
     expect(compare(prev, next)).to.deep.equal(result);
   });
 
@@ -174,7 +174,7 @@ describe("Test compare function", () => {
         }
       ]
     };
-
+    console.log("Test result 2", compare(prev, next));
     expect(compare(prev, next)).to.deep.equal(result);
   });
 
@@ -216,7 +216,7 @@ describe("Test compare function", () => {
         }
       ]
     };
-    console.log("result", compare(prev, next));
+    console.log("Test result 3", compare(prev, next));
     expect(compare(prev, next)).to.deep.equal(result);
   });
 });
