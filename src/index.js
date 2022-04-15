@@ -31,13 +31,17 @@ const goThroughArray = (arr, compareArr) => {
     return isArrChanged;
   }
   if (isObject(arr[0])) {
-    const elToAdd = compareArr.length - arr.length;
-    const elToCompare = compareArr.length - elToAdd;
+    const longerArray = arr.length > compareArr.length ? arr : compareArr;
+    const shorterArray = arr.length > compareArr.length ? compareArr : arr;
+
     let newObjEl = {};
-    compareArr.forEach((objEl, index) => {
-      const element = index + 1;
-      if (elToAdd >= 0 && element <= elToCompare) {
-        isArrChanged = [...isArrChanged, goThroughObj(objEl, arr[index])];
+    longerArray.forEach((objEl, index) => {
+      const elements = index + 1;
+      if (elements <= shorterArray.length) {
+        isArrChanged = [
+          ...isArrChanged,
+          goThroughObj(objEl, shorterArray[index])
+        ];
       } else {
         const newObjKeys = Object.keys(objEl);
         newObjEl = createNewBoolObj(objEl, newObjKeys);
@@ -55,14 +59,13 @@ const goThroughObj = (obj, compareObj) => {
   let tmpResult;
   for (const key in obj) {
     const value = obj[key];
-
     if (compareObj[key] === undefined) {
       const objKeys = Object.keys(value);
       if (isArray(value)) {
         if (isObject(value[0])) {
           tmpResult = {
             ...tmpResult,
-            [key]: [createNewBoolObj(value, objKeys)[0]]
+            [key]: value.map(() => createNewBoolObj(value, objKeys)[0])
           };
         } else {
           tmpResult = {
